@@ -37,14 +37,14 @@ describe('ItemsList', () => {
   it('should render items as list items', () => {
     const renderedItem = renderItemsListWithItems()
 
-    expect(renderedItem.find('li')).toHaveLength(2);
+    expect(renderedItem.find('.itemsList-li')).toHaveLength(2);
   });
 
   describe('delete', () => {
     it('should render a delete button next to each item', () => {
       const renderedItem = renderItemsListWithItems()
 
-      expect(renderedItem.find('li button.itemsList-delete')).toHaveLength(2);
+      expect(renderedItem.find('.itemsList-li button.itemsList-delete')).toHaveLength(2);
     });
 
     it(`should trigger onDeleteClick, passing item id, when the delete button is clicked`, () => {
@@ -54,7 +54,7 @@ describe('ItemsList', () => {
           onDeleteClick: mockOnDeleteClickHandler
         });
       
-      renderedItem.find('li button.itemsList-delete').at(1).simulate('click')
+      renderedItem.find('.itemsList-li button.itemsList-delete').at(1).simulate('click')
 
       expect(mockOnDeleteClickHandler).toHaveBeenCalled();
       expect(mockOnDeleteClickHandler).toHaveBeenCalledWith(2);
@@ -65,7 +65,7 @@ describe('ItemsList', () => {
     it('should render a checkbox next to each item', () => {
       const renderedItem = renderItemsListWithItems()
       
-      expect(renderedItem.find('li input[type="checkbox"].itemsList-complete')).toHaveLength(2);
+      expect(renderedItem.find('.itemsList-li input[type="checkbox"].itemsList-complete')).toHaveLength(2);
     });
 
     it(`should trigger onCompleteChange, passing item id, when the checkbox is changed`, () => {
@@ -74,7 +74,7 @@ describe('ItemsList', () => {
         onCompleteChange: mockOnCompleteChangeHandler
       })
 
-      renderedItem.find('li .itemsList-complete').at(0).simulate('change', { target: { checked: true } })
+      renderedItem.find('.itemsList-li .itemsList-complete').at(0).simulate('change', { target: { checked: true } })
       
       expect(mockOnCompleteChangeHandler).toHaveBeenCalledWith(1, true);
     });

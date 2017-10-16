@@ -2,7 +2,7 @@
   list-style-type: none;
 }
 
-.itemsList-ul li {
+.itemsList-ul .itemsList-li {
   padding: 5px;
 }
 

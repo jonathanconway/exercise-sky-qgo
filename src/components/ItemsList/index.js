@@ -9,7 +9,7 @@ export const ItemsList = ({ items, onDeleteClick, onCompleteChange }) => {
     <div>
       <ul className={'itemsList-ul'}>
         {items.length < 1 && <p id={'items-missing'}>Add some tasks above.</p>}
-        {items.map(item => <li key={item.id} className={item.isCompleted ? 'itemsList-li--strikethrough' : ''}>
+        {items.map(item => <li key={item.id} className={['itemsList-li', item.isCompleted ? 'itemsList-li--strikethrough' : ''].join(' ')}>
           <input
             className="itemsList-complete"
             type="checkbox"
