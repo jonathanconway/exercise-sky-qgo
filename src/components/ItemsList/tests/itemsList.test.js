@@ -40,6 +40,19 @@ describe('ItemsList', () => {
     expect(renderedItem.find('.itemsList-li')).toHaveLength(2);
   });
 
+  it('should not render completed items if `hide completed items` filter is activated', () => {
+    const items = [{ id: 1, content: 'Test 1', isCompleted: true }, { id: 2, content: 'Test 2' }];
+    const renderedItem = shallow(
+      <ItemsList
+        {...defaultProps}
+        items={items}
+        isFilterHideCompletedActivated={true}
+      />);
+
+    expect(renderedItem.find('.itemsList-li')).toHaveLength(1);
+    expect(renderedItem.find('.itemsList-li').at(0).key()).toEqual('2');
+  });
+
   describe('delete', () => {
     it('should render a delete button next to each item', () => {
       const renderedItem = renderItemsListWithItems()
@@ -79,7 +92,7 @@ describe('ItemsList', () => {
       expect(mockOnCompleteChangeHandler).toHaveBeenCalledWith(1, true);
     });
 
-    it('should strike-through the completed item, and only the completed item', () => {
+    it('should check and strike-through the completed item, and only the completed item', () => {
       const items = [{ id: 1, content: 'Test 1', isCompleted: true }, { id: 2, content: 'Test 2', isCompleted: false }];
       const renderedItem = shallow(
         <ItemsList
@@ -88,6 +101,7 @@ describe('ItemsList', () => {
 
       expect(renderedItem.find('li').at(0).hasClass('itemsList-li--strikethrough')).toBeTruthy();
       expect(renderedItem.find('li').at(1).hasClass('itemsList-li--strikethrough')).toBeFalsy();
+      expect(renderedItem.find('li input.itemsList-complete').at(0).prop('checked')).toBeTruthy();
     })
   });
 });

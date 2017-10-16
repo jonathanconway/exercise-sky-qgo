@@ -4,23 +4,44 @@ import { connect } from 'react-redux';
 import { deleteItem, toggleCompletionOfItem } from '../../logic/actions';
 import './styles.css';
 
-export const ItemsList = ({ items, onDeleteClick, onCompleteChange }) => {
+const exceptCompleted = (item) =>
+  !(item.isCompleted)
+
+const applyFilters = (isFilterHideCompletedActivated, items) =>
+  isFilterHideCompletedActivated
+    ? items.filter(exceptCompleted)
+    : items;
+
+export const ItemsList = ({
+  items, 
+  onDeleteClick,
+  onCompleteChange,
+  isFilterHideCompletedActivated
+}) => {
+  const filteredItems = applyFilters(isFilterHideCompletedActivated, items)
+
   return (
     <div>
       <ul className={'itemsList-ul'}>
-        {items.length < 1 && <p id={'items-missing'}>Add some tasks above.</p>}
-        {items.map(item => <li key={item.id} className={['itemsList-li', item.isCompleted ? 'itemsList-li--strikethrough' : ''].join(' ')}>
-          <input
-            className="itemsList-complete"
-            type="checkbox"
-            onChange={e => onCompleteChange(item.id, e.target.checked)} />
-          
-          {item.content}
-          
-          <button
-            className="itemsList-delete"
-            onClick={() => onDeleteClick(item.id)}>Delete</button>
-        </li>)}
+        {filteredItems.length < 1 && <p id={'items-missing'}>Add some tasks above.</p>}
+        {filteredItems.map(item =>
+          <li key={item.id}
+              className={[
+                'itemsList-li',
+                item.isCompleted ? 'itemsList-li--strikethrough' : ''
+              ].join(' ')}>
+            <input
+              className="itemsList-complete"
+              type="checkbox"
+              onChange={e => onCompleteChange(item.id, e.target.checked)}
+              checked={item.isCompleted} />
+            
+            {item.content}
+            
+            <button
+              className="itemsList-delete"
+              onClick={() => onDeleteClick(item.id)}>Delete</button>
+          </li>)}
       </ul>
     </div>
   );
@@ -33,13 +54,15 @@ ItemsList.propTypes = {
       content: PropTypes.string,
       isCompleted: PropTypes.bool
     })).isRequired,
+  isFilterHideCompletedActivated: PropTypes.bool,
   onDeleteClick: PropTypes.func,
   onCompleteChange: PropTypes.func
 };
 
-const mapStateToProps = state => {
-  return { items: state.todos.items };
-};
+const mapStateToProps = state => ({
+  items: state.todos.items,
+  isFilterHideCompletedActivated: state.todos.isFilterHideCompletedActivated
+});
 
 const mapDispatchToProps = dispatch => ({
   onDeleteClick: id => dispatch(deleteItem(id)),

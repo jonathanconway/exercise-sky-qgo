@@ -1,5 +1,10 @@
 import reducer, { initialState } from '../reducer';
-import { addItem, deleteItem, toggleCompletionOfItem } from '../actions';
+import {
+  addItem,
+  deleteItem,
+  toggleCompletionOfItem,
+  toggleFilterHideCompleted
+} from '../actions';
 
 describe('reducer', () => {
   it('should return state for unknown action', () => {
@@ -49,5 +54,17 @@ describe('reducer', () => {
     const result2 = reducer(result, mockAction);
 
     expect(result2.items[0].isCompleted).toEqual(false);
+  });
+
+  it('should toggle `hideCompleted` on TOGGLE_FILTER_HIDE_COMPLETED', () => {
+    const mockAction = toggleFilterHideCompleted();
+
+    const result = reducer(dummyStateWithTwoItems, mockAction);
+
+    expect(result.isFilterHideCompletedActivated).toBeTruthy();
+
+    const result2 = reducer(result, mockAction);
+
+    expect(result2.isFilterHideCompletedActivated).toBeFalsy();
   });
 });

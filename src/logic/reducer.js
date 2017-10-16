@@ -1,6 +1,12 @@
-import { ADD_ITEM, DELETE_ITEM, TOGGLE_COMPLETION_OF_ITEM } from './constants';
+import {
+  ADD_ITEM,
+  DELETE_ITEM,
+  TOGGLE_COMPLETION_OF_ITEM,
+  TOGGLE_FILTER_HIDE_COMPLETED
+} from './constants';
 
 export const initialState = {
+  filterHideCompleted: false,
   items: [
     { id: 1, content: 'Call mum'        , isCompleted: false },
     { id: 2, content: 'Buy cat food'    , isCompleted: false },
@@ -39,6 +45,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         items: state.items.map(toggleCompleteFlagIfMatched)
+      }
+    case TOGGLE_FILTER_HIDE_COMPLETED:
+      return {
+        ...state,
+        isFilterHideCompletedActivated: !state.isFilterHideCompletedActivated
       }
     default:
       return state;
