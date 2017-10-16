@@ -4,7 +4,8 @@ import { ItemsList } from '../index';
 
 const defaultProps = {
   items: [],
-  onDeleteClick: () => null
+  onDeleteClick: () => null,
+  onCompleteChange: () => null
 };
 
 describe('ItemsList', () => {
@@ -35,12 +36,14 @@ describe('ItemsList', () => {
 
   it('should render items as list items', () => {
     const renderedItem = renderItemsListWithItems()
+
     expect(renderedItem.find('li')).toHaveLength(2);
   });
 
   describe('delete', () => {
     it('should render a delete button next to each item', () => {
       const renderedItem = renderItemsListWithItems()
+
       expect(renderedItem.find('li button.itemsList-delete')).toHaveLength(2);
     });
 
@@ -56,5 +59,35 @@ describe('ItemsList', () => {
       expect(mockOnDeleteClickHandler).toHaveBeenCalled();
       expect(mockOnDeleteClickHandler).toHaveBeenCalledWith(2);
     });
+  });
+
+  describe('complete', () => {
+    it('should render a checkbox next to each item', () => {
+      const renderedItem = renderItemsListWithItems()
+      
+      expect(renderedItem.find('li input[type="checkbox"].itemsList-complete')).toHaveLength(2);
+    });
+
+    it(`should trigger onCompleteChange, passing item id, when the checkbox is changed`, () => {
+      const mockOnCompleteChangeHandler = jest.fn();
+      const renderedItem = renderItemsListWithItems({
+        onCompleteChange: mockOnCompleteChangeHandler
+      })
+
+      renderedItem.find('li .itemsList-complete').at(0).simulate('change', { target: { checked: true } })
+      
+      expect(mockOnCompleteChangeHandler).toHaveBeenCalledWith(1, true);
+    });
+
+    it('should strike-through the completed item, and only the completed item', () => {
+      const items = [{ id: 1, content: 'Test 1', isCompleted: true }, { id: 2, content: 'Test 2', isCompleted: false }];
+      const renderedItem = shallow(
+        <ItemsList
+          {...defaultProps}
+          items={items} />);
+
+      expect(renderedItem.find('li').at(0).hasClass('itemsList-li--strikethrough')).toBeTruthy();
+      expect(renderedItem.find('li').at(1).hasClass('itemsList-li--strikethrough')).toBeFalsy();
+    })
   });
 });

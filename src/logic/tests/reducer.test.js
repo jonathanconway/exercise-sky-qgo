@@ -1,5 +1,5 @@
 import reducer, { initialState } from '../reducer';
-import { addItem, deleteItem } from '../actions';
+import { addItem, deleteItem, toggleCompletionOfItem } from '../actions';
 
 describe('reducer', () => {
   it('should return state for unknown action', () => {
@@ -17,8 +17,8 @@ describe('reducer', () => {
 
   const dummyStateWithTwoItems = {
     items: [
-      { id: 1, content: 'first' },
-      { id: 2, content: 'second' },
+      { id: 1, content: 'first' , isCompleted: false },
+      { id: 2, content: 'second', isCompleted: false },
     ]
   }
 
@@ -36,5 +36,18 @@ describe('reducer', () => {
     expect(result.items).toHaveLength(1);
     expect(result.items[0].id).toEqual(2);
     expect(result.items[0].content).toEqual('second');
+  });
+
+  it(`should toggle the 'complete' flag of the item matching the
+      given id on TOGGLE_COMPLETION_OF_ITEM`, () => {
+    const mockAction = toggleCompletionOfItem(1);
+    
+    const result = reducer(dummyStateWithTwoItems, mockAction);
+    
+    expect(result.items[0].isCompleted).toEqual(true);
+
+    const result2 = reducer(result, mockAction);
+
+    expect(result2.items[0].isCompleted).toEqual(false);
   });
 });

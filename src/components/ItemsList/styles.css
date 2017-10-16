@@ -5,3 +5,7 @@
 .itemsList-ul li {
   padding: 5px;
 }
+
+.itemsList-ul .itemsList-li--strikethrough {
+  text-decoration: line-through;
+}
