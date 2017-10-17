@@ -34,7 +34,7 @@ const reducer = (state = initialState, action) => {
         items: state.items.filter(item => item.id !== action.id)
       }
     case TOGGLE_COMPLETION_OF_ITEM:
-      const toggleCompleteFlagIfMatched =
+      const toggleItemCompleteFlagIfMatched =
         item => ({
           ...item,
           isCompleted: item.id === action.id
@@ -44,7 +44,7 @@ const reducer = (state = initialState, action) => {
 
       return {
         ...state,
-        items: state.items.map(toggleCompleteFlagIfMatched)
+        items: state.items.map(toggleItemCompleteFlagIfMatched)
       }
     case TOGGLE_FILTER_HIDE_COMPLETED:
       return {

@@ -12,6 +12,10 @@ const applyFilters = (isFilterHideCompletedActivated, items) =>
     ? items.filter(exceptCompleted)
     : items;
 
+const renderItemClassName = item =>
+  `itemsList-li
+  ${item.isCompleted ? 'itemsList-li--strikethrough' : null}`
+
 export const ItemsList = ({
   items, 
   onDeleteClick,
@@ -22,14 +26,10 @@ export const ItemsList = ({
 
   return (
     <div>
-      {filteredItems.length < 1 && <p id={'items-missing'}>Add some tasks above.</p>}
+      {filteredItems.length < 1 && <p id="items-missing">Add some tasks above.</p>}
       <ul className={'itemsList-ul'}>
         {filteredItems.map(item =>
-          <li key={item.id}
-              className={[
-                'itemsList-li',
-                item.isCompleted ? 'itemsList-li--strikethrough' : ''
-              ].join(' ')}>
+          <li key={item.id} className={renderItemClassName(item)}>
             <input
               className="itemsList-complete"
               type="checkbox"
