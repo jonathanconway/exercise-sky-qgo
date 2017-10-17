@@ -22,8 +22,8 @@ export const ItemsList = ({
 
   return (
     <div>
+      {filteredItems.length < 1 && <p id={'items-missing'}>Add some tasks above.</p>}
       <ul className={'itemsList-ul'}>
-        {filteredItems.length < 1 && <p id={'items-missing'}>Add some tasks above.</p>}
         {filteredItems.map(item =>
           <li key={item.id}
               className={[
